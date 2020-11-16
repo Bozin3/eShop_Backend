@@ -15,6 +15,7 @@ namespace eShop_Backend.Models
         public eShopContext(DbContextOptions<eShopContext> options)
             : base(options)
         {
+            // test
         }
 
         public virtual DbSet<Address> Addresses { get; set; }
@@ -23,14 +24,6 @@ namespace eShop_Backend.Models
         public virtual DbSet<OrdersDetail> OrdersDetails { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<User> Users { get; set; }
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (!optionsBuilder.IsConfigured)
-        //    {
-        //        optionsBuilder.UseSqlServer("Server=DESKTOP-BAUU60D;Database=eShop;Trusted_Connection=True;");
-        //    }
-        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

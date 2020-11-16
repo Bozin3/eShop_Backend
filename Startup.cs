@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using eShop_Backend.Models;
+using eShop_Backend.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,9 @@ namespace eShop_Backend
         {
             services.AddControllers();
             services.AddDbContext<eShopContext>(options => options.UseSqlServer(Configuration["ConnectionString"]));
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IProductsRepository, ProductsRepository>();
+            services.AddScoped<IOrdersRepository, OrdersRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

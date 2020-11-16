@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using eShop_Backend.Models;
+using eShop_Backend.Repositories;
 
 namespace eShop_Backend.Controllers
 {
@@ -13,25 +14,25 @@ namespace eShop_Backend.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly eShopContext _context;
+        private readonly IUserRepository userRepository;
 
-        public UsersController(eShopContext context)
+        public UsersController(IUserRepository userRepository)
         {
-            _context = context;
+            this.userRepository = userRepository;
         }
 
         // GET: api/Users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await userRepository.GetUsers();
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await userRepository.GetUser(id);
 
             if (user == null)
             {
@@ -50,22 +51,18 @@ namespace eShop_Backend.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            if(!userRepository.UserExists(id))
+            {
+                return NotFound();
+            }
 
             try
             {
-                await _context.SaveChangesAsync();
+                await userRepository.UpdateUser(user);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return StatusCode(500, ex.Message);
             }
 
             return NoContent();
@@ -75,8 +72,13 @@ namespace eShop_Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await userRepository.AddUser(user);
+            } catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
 
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
@@ -85,21 +87,17 @@ namespace eShop_Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<User>> DeleteUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await userRepository.GetUser(id);
+            
             if (user == null)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            await userRepository.DeleteUser(user);
 
             return user;
         }
 
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
-        }
     }
 }
