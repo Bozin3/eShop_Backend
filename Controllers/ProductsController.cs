@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using eShop_Backend.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eShop_Backend.Controllers
@@ -38,17 +35,31 @@ namespace eShop_Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetProducts([FromQuery]int? categoryId)
+        public async Task<ActionResult> GetProducts([FromQuery]int? categoryId, [FromQuery] int page, [FromQuery] int limit = 10)
         {
             try
             {
-                var products = categoryId.HasValue ? await productsRepository.GetProductsByCategory((int)categoryId) : await productsRepository.GetProducts();
+                initPaginationFilters(page, limit, out int startValue);
+
+                var products = await productsRepository.GetProducts(categoryId, startValue, limit);
 
                 return Ok(products);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
+            }
+        }
+
+        private void initPaginationFilters(int page, int limit, out int startValue)
+        {
+            if (page > 0)
+            {
+                startValue = ((int)page * limit) - limit; 
+            }
+            else
+            {
+                startValue = 0;
             }
         }
 

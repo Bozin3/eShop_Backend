@@ -21,14 +21,16 @@ namespace eShop_Backend.Repositories
             return await context.Products.FindAsync(productId);
         }
 
-        public async Task<List<Product>> GetProducts()
+        public async Task<List<Product>> GetProducts(int? categoryId, int startValue, int limit)
         {
-            return await context.Products.ToListAsync();
+            if (categoryId.HasValue)
+            {
+                return await context.Products.Where(p => p.CatId == categoryId)
+               .Skip(startValue).Take(limit).ToListAsync();
+            }
+            
+            return await context.Products.Skip(startValue).Take(limit).ToListAsync();
         }
 
-        public async Task<List<Product>> GetProductsByCategory(int categoryId)
-        {
-            return await context.Products.Where(p => p.CatId == categoryId).ToListAsync();
-        }
     }
 }

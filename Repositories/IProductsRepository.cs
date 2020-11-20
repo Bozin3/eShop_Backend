@@ -8,8 +8,7 @@ namespace eShop_Backend.Repositories
 {
     public interface IProductsRepository
     {
-        Task<List<Product>> GetProducts();
+        Task<List<Product>> GetProducts(int? categoryId, int startValue, int limit);
         Task<Product> GetProduct(int productId);
-        Task<List<Product>> GetProductsByCategory(int categoryId);
     }
 }
