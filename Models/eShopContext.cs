@@ -94,6 +94,8 @@ namespace eShop_Backend.Models
 
                 entity.Property(e => e.UserId).HasColumnName("user_id");
 
+                entity.Property(e => e.OrderDate).HasColumnName("order_date");
+
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.UserId)
@@ -114,6 +116,9 @@ namespace eShop_Backend.Models
                 entity.Property(e => e.Quantity)
                     .HasColumnName("quantity")
                     .HasDefaultValueSql("('1')");
+
+                entity.Property(e => e.Price)
+                   .HasColumnName("price");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrdersDetails)

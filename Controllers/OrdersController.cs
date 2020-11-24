@@ -63,7 +63,6 @@ namespace eShop_Backend.Controllers
             {
                 await ordersRepository.AddOrder(order);
                 return CreatedAtAction("GetOrder", new { id = order.Id }, order);
-
             }
             catch (Exception ex)
             {

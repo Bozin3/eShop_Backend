@@ -18,6 +18,7 @@ namespace eShop_Backend.Repositories
         }
         public async Task AddOrder(Order order)
         {
+            order.OrderDate = DateTime.Now;
             await context.Orders.AddAsync(order);
             await context.SaveChangesAsync();
         }
@@ -30,7 +31,9 @@ namespace eShop_Backend.Repositories
 
         public async Task<Order> GetOrder(int id)
         {
-            return await context.Orders.FindAsync(id);
+            return await context.Orders.Where(o => o.Id == id)
+                       .Include(o => o.OrdersDetails).ThenInclude(o => o.Product)
+                       .FirstOrDefaultAsync();
         }
 
         public async Task<List<Order>> GetOrders()
