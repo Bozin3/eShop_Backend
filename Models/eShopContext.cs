@@ -201,11 +201,13 @@ namespace eShop_Backend.Models
                     .IsUnicode(false)
                     .HasColumnName("lname");
 
-                entity.Property(e => e.Password)
+                entity.Property(e => e.PasswordHash)
                     .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .HasColumnName("password");
+                    .HasColumnName("password_hash");
+
+                entity.Property(e => e.PasswordSalt)
+                 .IsRequired()
+                 .HasColumnName("password_salt");
 
                 entity.Property(e => e.PhotoUrl)
                     .HasColumnType("text")
@@ -221,12 +223,7 @@ namespace eShop_Backend.Models
                     .IsUnicode(false)
                     .HasColumnName("type")
                     .HasDefaultValueSql("('local')");
-
-                entity.Property(e => e.Username)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .HasColumnName("username");
+            
             });
 
             OnModelCreatingPartial(modelBuilder);

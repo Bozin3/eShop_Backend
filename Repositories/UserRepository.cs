@@ -26,10 +26,10 @@ namespace eShop_Backend.Repositories
             return context.Users.ToListAsync();
         }
 
-        public async Task AddUser(User user)
+        public async Task<int> AddUser(User user)
         {
             context.Users.Add(user);
-            await context.SaveChangesAsync();
+            return await context.SaveChangesAsync();
         }
 
         public async Task DeleteUser(User user)
@@ -47,6 +47,11 @@ namespace eShop_Backend.Repositories
         public bool UserExists(int id)
         {
             return context.Users.Any(e => e.Id == id);
+        }
+
+        public Task<User> GetUserByEmail(string email)
+        {
+            return context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
         }
     }
 }

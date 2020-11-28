@@ -10,8 +10,9 @@ namespace eShop_Backend.Repositories
     {
         Task<List<User>> GetUsers();
         Task<User> GetUser(int id);
+        Task<User> GetUserByEmail(String email);
         Task UpdateUser(User user);
-        Task AddUser(User user);
+        Task<int> AddUser(User user);
         Task DeleteUser(User user);
         bool UserExists(int id);
     }

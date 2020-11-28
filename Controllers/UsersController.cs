@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using eShop_Backend.Models;
 using eShop_Backend.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eShop_Backend.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
