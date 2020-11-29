@@ -64,6 +64,7 @@ namespace eShop_Backend
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<IOrdersRepository, OrdersRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IPasswordHandler, PasswordHandler>();
             services.AddScoped<IAuthTokenHandler, AuthTokenHandler>();
         }
