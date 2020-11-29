@@ -34,7 +34,7 @@ namespace eShop_Backend.Controllers
 
                 if(user == null)
                 {
-                    return NotFound(new LoginResponse { Success = false, Message = "User not found!" });
+                    return Ok(new LoginResponse { Success = false, Message = "User not found!" });
                 }
 
                 if(!passwordHandler.CheckValidPassword(loginRequest.Password, user))
