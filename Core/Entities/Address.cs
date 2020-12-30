@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-#nullable disable
-
-namespace eShop_Backend.Models
+﻿namespace eShop_Backend.Core.Entities
 {
     public partial class Address
     {

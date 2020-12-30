@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Security.Claims;
-using eShop_Backend.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
+using eShop_Backend.Core.Entities;
 
 namespace eShop_Backend.Utils
 {

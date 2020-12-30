@@ -1,4 +1,5 @@
-﻿using eShop_Backend.Models;
+﻿using eShop_Backend.Core;
+using eShop_Backend.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

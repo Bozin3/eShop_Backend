@@ -1,4 +1,4 @@
-﻿using eShop_Backend.Models;
+﻿using eShop_Backend.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

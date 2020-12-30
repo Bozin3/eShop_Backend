@@ -1,9 +1,9 @@
-﻿using System;
+﻿using eShop_Backend.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using eShop_Backend.Models;
 
 namespace eShop_Backend.Utils
 {

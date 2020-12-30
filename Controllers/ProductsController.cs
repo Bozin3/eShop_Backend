@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using eShop_Backend.Models.Requests;
 using eShop_Backend.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,42 +21,31 @@ namespace eShop_Backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetProduct(int id)
         {
-            try
+            var product = await productsRepository.GetProduct(id);
+           
+            if (product == null)
             {
-                var product = await productsRepository.GetProduct(id);
-                if (product == null) {
-                    return NotFound($"Product with ID {id} doesn't exists!");
-                }
-                return Ok(product);
-
-            } catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
+                return NotFound($"Product with ID {id} doesn't exists!");
             }
+           
+            return Ok(product);
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetProducts([FromQuery]int? categoryId, [FromQuery] int page, [FromQuery] int limit = 10)
+        public async Task<ActionResult> GetProducts([FromQuery] GetProductsQueryParams getProductsQueryParams)
         {
-            try
-            {
-                initPaginationFilters(page, limit, out int startValue);
+            initPaginationFilters(getProductsQueryParams, out int startValue);
 
-                var products = await productsRepository.GetProducts(categoryId, startValue, limit);
+            var products = await productsRepository.GetProducts(getProductsQueryParams.categoryId, startValue, getProductsQueryParams.limit);
 
-                return Ok(products);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            return Ok(products);
         }
 
-        private void initPaginationFilters(int page, int limit, out int startValue)
+        private void initPaginationFilters(GetProductsQueryParams getProductsQueryParams, out int startValue)
         {
-            if (page > 0)
+            if (getProductsQueryParams.page > 0)
             {
-                startValue = ((int)page * limit) - limit; 
+                startValue = ((int)getProductsQueryParams.page * getProductsQueryParams.limit) - getProductsQueryParams.limit; 
             }
             else
             {

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using eShop_Backend.Models;
 using eShop_Backend.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using eShop_Backend.Core.Entities;
 
 namespace eShop_Backend.Controllers
 {
@@ -58,14 +55,7 @@ namespace eShop_Backend.Controllers
                 return NotFound();
             }
 
-            try
-            {
-                await userRepository.UpdateUser(user);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            await userRepository.UpdateUser(user);
 
             return NoContent();
         }
@@ -74,13 +64,7 @@ namespace eShop_Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-            try
-            {
-                await userRepository.AddUser(user);
-            } catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            await userRepository.AddUser(user);
 
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using eShop_Backend.Core;
+using eShop_Backend.Core.Entities;
 using eShop_Backend.Models;
 using Microsoft.EntityFrameworkCore;
 

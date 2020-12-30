@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using eShop_Backend.Models.Auth;
+using eShop_Backend.Models.Requests;
+using eShop_Backend.Models.Responses;
 using eShop_Backend.Repositories;
 using eShop_Backend.Utils;
 using Microsoft.AspNetCore.Http;
@@ -28,50 +29,51 @@ namespace eShop_Backend.Controllers
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] LoginRequest loginRequest)
         {
-            try
+
+            if(!ModelState.IsValid)
             {
-                var user = await userRepository.GetUserByEmail(loginRequest.Email);
-
-                if(user == null)
-                {
-                    return Ok(new LoginResponse { Success = false, Message = "User not found!" });
-                }
-
-                if(!passwordHandler.CheckValidPassword(loginRequest.Password, user))
-                {
-                    return Ok(new LoginResponse { Success = false, Message = "Wrong user/password combination, please try again!" });
-                }
-
-                return Ok(new LoginResponse { Success = true, Message = null, Token = tokenHandler.CreateToken(user)});
+                return BadRequest(ModelState);
             }
-            catch (Exception ex)
+
+            var user = await userRepository.GetUserByEmail(loginRequest.Email);
+
+            if (user == null)
             {
-                return StatusCode(500, ex.Message);
+                return Ok(new LoginResponse { Success = false, Message = "User not found!" });
             }
+
+            if (!passwordHandler.CheckValidPassword(loginRequest.Password, user))
+            {
+                return Ok(new LoginResponse { Success = false, Message = "Wrong user/password combination, please try again!" });
+            }
+
+            return Ok(new LoginResponse { Success = true, Message = null, Token = tokenHandler.CreateToken(user) });
         }
 
         // POST: api/auth/register
         [HttpPost("register")]
         public async Task<ActionResult> Register([FromBody] RegisterRequest registerRequest)
         {
-            try
+
+            if (!ModelState.IsValid)
             {
-                var user = UserMapper.CreateUserFromRequest(registerRequest);
-                byte[] passwordHash, passwordSalt;
-                passwordHandler.CreatePasswordHash(registerRequest.Password, out passwordHash, out passwordSalt);
-                user.PasswordHash = passwordHash;
-                user.PasswordSalt = passwordSalt;
-                if(await userRepository.AddUser(user) > 0)
-                {
-                    return Ok(new RegisterResponse { Success = true, Message = null });
-                } else
-                {
-                    return Ok(new RegisterResponse { Success = false, Message = "Something went wrong, please try again" });
-                }
+                return BadRequest(ModelState);
             }
-            catch (Exception ex)
+            
+            byte[] passwordHash, passwordSalt;
+            passwordHandler.CreatePasswordHash(registerRequest.Password, out passwordHash, out passwordSalt);
+
+            var user = UserMapper.CreateUserFromRequest(registerRequest);
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+
+            if (await userRepository.AddUser(user) > 0)
             {
-                return StatusCode(500, ex.Message);
+                return Ok(new RegisterResponse { Success = true, Message = null });
+            }
+            else
+            {
+                return Ok(new RegisterResponse { Success = false, Message = "Something went wrong, please try again" });
             }
         }
 

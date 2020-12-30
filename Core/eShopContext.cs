@@ -1,10 +1,9 @@
 ﻿using System;
+using eShop_Backend.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-#nullable disable
-
-namespace eShop_Backend.Models
+namespace eShop_Backend.Core
 {
     public partial class eShopContext : DbContext
     {
